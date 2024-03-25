@@ -4,18 +4,25 @@ import { validarCategoria } from "../../helpers/validaciones,js";
 import clsx from 'clsx';
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+// usamos la variable de entorno
+const API=import.meta.env.VITE_API;
 const CrearProducto = () => {
 /*
     const [title, setTitle]=useState('');
     const [description, setDescription]=useState('');
     const [category, setCategory]=useState('');
 */
+// usamos navigate de react router dom
+const navigate=useNavigate();
+
 // usamos formik, creamos un esquema
+
 const ProductSchema=Yup.object().shape(
     {
         title: Yup.string().min(4,'min 4 caract.').max(20,'max 20 caract.').required('El titulo es requerido'),
-        description: Yup.string().min(10,'Escribe más de 10 caract.').max(200).required('La descripcion es requerida'),
+        description: Yup.string().min(10,'Escribe más de 10 caract.').max(200,'. 200 caract').required('La descripcion es requerida'),
         category: Yup.string().required('La categoria es requerida.'),
     }
 );
@@ -33,9 +40,48 @@ const formik=useFormik(
     validateOnChange: true,
     onSubmit: (values) =>{
         console.log("values de formik:",values);
-        }
+        Swal.fire({
+            title: "Estas seguro de guardar el producto?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Guardar"
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`${API}/productos`,{
+                        method:"POST",
+                        headers:{
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(values),
+                    });
+                    //console.log("RESPONSE", response);
+                    ///console.log(response.status);
+                    if(response.status===201){
+                    formik.resetForm();
+                        Swal.fire({
+                            title: "EXITO!",
+                            text: "Se creo un nuevo producto",
+                            icon: "success"
+                          });
+                    }
+                    
+                } catch (error) {
+                    console.log("ERROR",error);
+                }
+             
+            }
+          });
+
+        
+       
     }
-);
+});
+// para solicitar una peticion a un servidor lo hacmeos asicronico. se utilizan las promesas. 
+
+
 
 
 
@@ -53,6 +99,7 @@ console.log("NUEVOPRODUCTO", nuevoProducto)
     return (
         <>
             <div className="container py-3 my-3">
+                <button variant="secundary" onClick={()=>navigate(-1)}>Atras</button>
                 <div className="text-center">
                     <h1>Crear producto</h1>
                 </div>

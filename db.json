@@ -1,0 +1,22 @@
+{
+  "productos": [
+    {
+      "id": "8346",
+      "title": "asdaasdsadsad",
+      "description": "sadsadsadsad",
+      "category": "Remeras"
+    },
+    {
+      "id": "aa88",
+      "title": "sadsadsad",
+      "description": "sadsadasdasd",
+      "category": "Remeras"
+    },
+    {
+      "id": "e936",
+      "title": "sadsadsad",
+      "description": "sadasdsadsad",
+      "category": "Remeras"
+    }
+  ]
+}

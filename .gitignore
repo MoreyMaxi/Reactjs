@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Crear una variable de entorno, ignoramos el archivo
+.env
